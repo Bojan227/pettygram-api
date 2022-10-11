@@ -6,7 +6,8 @@ type signUserProps = {
   password: string;
   firstName: string;
   lastName: string;
-  statics: {};
+  imageId: string;
+  imageUrl: string;
 };
 
 const UserSchema = new Schema({
@@ -14,6 +15,8 @@ const UserSchema = new Schema({
   password: String,
   firstName: String,
   lastName: String,
+  imageId: String,
+  imageUrl: String,
 });
 
 UserSchema.statics.signup = async function ({

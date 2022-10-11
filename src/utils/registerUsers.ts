@@ -6,6 +6,8 @@ type signUserProps = {
   password: string;
   firstName: string;
   lastName: string;
+  imageId: string;
+  imageUrl: string;
 };
 
 export const signup = async ({
@@ -13,8 +15,10 @@ export const signup = async ({
   password,
   firstName,
   lastName,
+  imageId,
+  imageUrl,
 }: signUserProps) => {
-  if (!username || !password || !firstName || !lastName) {
+  if (!username || !password || !firstName || !lastName || !imageId) {
     throw new Error('All fields must be filled');
   }
 
@@ -32,6 +36,8 @@ export const signup = async ({
     password: hash,
     firstName,
     lastName,
+    imageId,
+    imageUrl,
   });
 
   return user;

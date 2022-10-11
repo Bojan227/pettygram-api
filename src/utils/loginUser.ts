@@ -12,7 +12,6 @@ export const loginUser = async ({ username, password }: loginUserProps) => {
   }
 
   const user = await User.findOne({ username });
-  console.log(user);
 
   if (!user) {
     throw new Error('Wrong username');
