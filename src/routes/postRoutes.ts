@@ -17,7 +17,7 @@ router.get('/:postId/comments', getSpecificPostComments);
 
 router.post('/', requireAuth, createPost);
 
-router.put('/', updateLikes);
+router.put('/', requireAuth, updateLikes);
 
 router.delete('/', deletePost);
 export default router;

@@ -1,14 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
 const { Schema } = mongoose;
-type signUserProps = {
-  username: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  imageId: string;
-  imageUrl: string;
-};
 
 const UserSchema = new Schema({
   username: String,
@@ -18,35 +9,6 @@ const UserSchema = new Schema({
   imageId: String,
   imageUrl: String,
 });
-
-UserSchema.statics.signup = async function ({
-  username,
-  password,
-  firstName,
-  lastName,
-}: signUserProps) {
-  if (!username || !password) {
-    throw new Error('All fields must be filled');
-  }
-
-  const exist = await this?.findOne({ username });
-
-  if (exist) {
-    throw new Error('username already in use');
-  }
-
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(password, salt);
-
-  const user = await this.create({
-    username,
-    password: hash,
-    firstName,
-    lastName,
-  });
-
-  return user;
-};
 
 const myDB = mongoose.connection.useDb('insta');
 

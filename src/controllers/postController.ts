@@ -4,8 +4,12 @@ import { uploadImage } from '../utils/uploadImage';
 
 export const getPosts = async (req: any, res: any) => {
   try {
-    const posts = await Post.find({});
-    res.status(200).json({ posts });
+    const posts = await Post.find({}).populate({
+      path: 'createdBy',
+      select: ['_id', 'username', 'imageUrl'],
+    });
+    console.log(posts);
+    res.status(200).json(posts);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -32,7 +36,7 @@ export const createPost = async (req: any, res: any) => {
       createdAt: new Date(),
       imageUrl,
       imageId,
-      likes: 0,
+      likes: [],
       createdBy: req.user[0],
     });
     res.status(200).json({ post });
@@ -41,24 +45,29 @@ export const createPost = async (req: any, res: any) => {
   }
 };
 export const updateLikes = async (req: any, res: any) => {
-  const { like, _id } = req.body;
+  const { like, _id, userId } = req.body;
+
+  const { likes } = await Post.findOne({ _id });
 
   let update = {
-    $inc: {
-      likes: 1,
+    $set: {
+      likes: [...likes, userId],
     },
   };
 
   if (!like) {
     update = {
-      $inc: {
-        likes: -1,
+      $set: {
+        likes: likes.filter((id) => id !== userId),
       },
     };
   }
 
   const post = await Post.findOneAndUpdate({ _id }, update, {
     returnOriginal: false,
+  }).populate({
+    path: 'createdBy',
+    select: ['_id', 'username', 'imageUrl'],
   });
 
   if (!post) {

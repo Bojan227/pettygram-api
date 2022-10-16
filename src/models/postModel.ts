@@ -1,13 +1,14 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
+import User from './userModel';
 
 const PostSchema = new Schema({
   text: String,
-  createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
+  createdBy: { type: Schema.Types.ObjectId, ref: User },
   imageUrl: String,
   imageId: String,
   createdAt: String,
-  likes: Number,
+  likes: [String],
 });
 const myDB = mongoose.connection.useDb('insta');
 
