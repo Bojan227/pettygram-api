@@ -4,7 +4,8 @@ const { Schema } = mongoose;
 const PostSchema = new Schema({
   text: String,
   createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
-  images: [String],
+  imageUrl: String,
+  imageId: String,
   createdAt: String,
   likes: Number,
 });

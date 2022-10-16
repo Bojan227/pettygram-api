@@ -1,7 +1,6 @@
 import Comment from '../models/commentsModel';
 
 export const createComment = async (req: any, res: any) => {
-  console.log(req.body);
   try {
     const commment = await Comment.create({
       ...req.body,

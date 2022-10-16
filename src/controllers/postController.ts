@@ -1,5 +1,7 @@
 import Post from '../models/postModel';
 import Comment from '../models/commentsModel';
+import { uploadImage } from '../utils/uploadImage';
+
 export const getPosts = async (req: any, res: any) => {
   try {
     const posts = await Post.find({});
@@ -20,10 +22,16 @@ export const getPostById = async (req: any, res: any) => {
 };
 
 export const createPost = async (req: any, res: any) => {
+  const { text, image } = req.body;
+
   try {
+    const { imageUrl, imageId } = await uploadImage(image);
+
     const post = await Post.create({
-      ...req.body,
+      text,
       createdAt: new Date(),
+      imageUrl,
+      imageId,
       likes: 0,
       createdBy: req.user[0],
     });

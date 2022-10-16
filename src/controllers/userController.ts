@@ -8,7 +8,6 @@ const createToken = (_id: any) => {
 };
 
 export const registerUser = async (req: any, res: any) => {
-  console.log(req.body);
   const { username, password, firstName, lastName, image } = req.body;
 
   try {
@@ -22,8 +21,6 @@ export const registerUser = async (req: any, res: any) => {
       imageId,
     });
 
-    console.log(user);
-
     res.status(200).json({ message: 'Successfully signed up' });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -33,13 +30,13 @@ export const registerUser = async (req: any, res: any) => {
 export const login = async (req: any, res: any) => {
   try {
     const user = await loginUser(req.body);
-    const { username, firstName, lastName } = user;
+    const { username, firstName, lastName, imageUrl } = user;
 
     const token = createToken(user._id);
 
     res.status(200).json({
       token,
-      user: { username, firstName, lastName },
+      user: { username, firstName, lastName, imageUrl },
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
