@@ -18,8 +18,11 @@ export const getPosts = async (req: any, res: any) => {
 export const getPostById = async (req: any, res: any) => {
   const { postId } = req.params;
   try {
-    const post = await Post.findOne({ _id: postId });
-    res.status(200).json({ post });
+    const post = await Post.findOne({ _id: postId }).populate({
+      path: 'createdBy',
+      select: ['_id', 'username', 'imageUrl'],
+    });
+    res.status(200).json(post);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -93,7 +96,10 @@ export const getSpecificPostComments = async (req: any, res: any) => {
   const { postId } = req.params;
 
   try {
-    const comments = await Comment.find({ post: postId });
+    const comments = await Comment.find({ post: postId }).populate({
+      path: 'createdBy',
+      select: ['_id', 'username', 'imageUrl'],
+    });
 
     return res.status(200).json(comments);
   } catch (error) {

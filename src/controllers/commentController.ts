@@ -9,7 +9,7 @@ export const createComment = async (req: any, res: any) => {
       createdBy: req.user[0],
     });
 
-    return res.status(200).json(commment);
+    return res.status(200).json({ message: 'Comment created' });
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
