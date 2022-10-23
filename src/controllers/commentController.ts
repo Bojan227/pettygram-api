@@ -5,7 +5,7 @@ export const createComment = async (req: any, res: any) => {
     const commment = await Comment.create({
       ...req.body,
       createdAt: new Date(),
-      likes: 0,
+      likes: [],
       createdBy: req.user[0],
     });
 
@@ -16,24 +16,29 @@ export const createComment = async (req: any, res: any) => {
 };
 
 export const updateCommentLikes = async (req: any, res: any) => {
-  const { like, _id } = req.body;
+  const { like, _id, userId } = req.body;
+
+  const { likes } = await Comment.findOne({ _id });
 
   let update = {
-    $inc: {
-      likes: 1,
+    $set: {
+      likes: [...likes, userId],
     },
   };
 
   if (!like) {
     update = {
-      $inc: {
-        likes: -1,
+      $set: {
+        likes: likes.filter((id) => id !== userId),
       },
     };
   }
 
   const post = await Comment.findOneAndUpdate({ _id }, update, {
     returnOriginal: false,
+  }).populate({
+    path: 'createdBy',
+    select: ['_id', 'username', 'imageUrl'],
   });
 
   if (!post) {

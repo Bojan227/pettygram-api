@@ -8,7 +8,7 @@ const CommentSchema = new Schema({
   post: { type: Schema.Types.ObjectId, ref: Post },
   createdBy: { type: Schema.Types.ObjectId, ref: User },
   createdAt: String,
-  likes: Number,
+  likes: [String],
 });
 
 const myDB = mongoose.connection.useDb('insta');

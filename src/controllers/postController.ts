@@ -8,7 +8,6 @@ export const getPosts = async (req: any, res: any) => {
       path: 'createdBy',
       select: ['_id', 'username', 'imageUrl'],
     });
-    console.log(posts);
     res.status(200).json(posts);
   } catch (error) {
     res.status(400).json({ error: error.message });
