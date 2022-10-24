@@ -1,5 +1,6 @@
 import User from '../models/userModel';
 import bcrypt from 'bcrypt';
+import { body, validationResult, check } from 'express-validator';
 
 type signUserProps = {
   username: string;

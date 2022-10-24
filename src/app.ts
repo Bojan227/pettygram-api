@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+
 const app = express();
 // const cloudinary = require('cloudinary').v2;
 

@@ -7,11 +7,13 @@ import {
   getPostById,
   updateLikes,
   getSpecificPostComments,
+  getPostsByUserId,
 } from '../controllers/postController';
 import { requireAuth } from '../middleware/requireAuth';
 
 router.get('/', getPosts);
 
+router.get('/:userId', getPostsByUserId);
 router.get('/:postId', getPostById);
 router.get('/:postId/comments', getSpecificPostComments);
 

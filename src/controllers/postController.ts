@@ -14,6 +14,19 @@ export const getPosts = async (req: any, res: any) => {
   }
 };
 
+export const getPostsByUserId = async (req: any, res: any) => {
+  const { userId } = req.params;
+  try {
+    const posts = await Post.find({ createdBy: userId }).populate({
+      path: 'createdBy',
+      select: ['_id', 'username', 'imageUrl'],
+    });
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 export const getPostById = async (req: any, res: any) => {
   const { postId } = req.params;
   try {
