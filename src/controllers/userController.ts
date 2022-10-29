@@ -10,16 +10,26 @@ const createToken = (_id: any) => {
 };
 
 export const getUsers = async (req: any, res: any) => {
-  const { id } = req.body;
-
+  console.log(req.user);
   try {
-    const users = await User.find({ _id: { $ne: id } }, { password: 0 });
+    const users = await User.find({}, { password: 0 });
 
     console.log(users);
-
     res.status(200).json(users);
   } catch (error) {
     res.status(404).json({ msg: 'Users cannot be found' });
+  }
+};
+
+export const getUserById = async (req: any, res: any) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findById({ _id: userId });
+
+    console.log(user);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ msg: 'User unknown' });
   }
 };
 
