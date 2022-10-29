@@ -8,6 +8,8 @@ const UserSchema = new Schema({
   lastName: String,
   imageId: String,
   imageUrl: String,
+  followers: [String],
+  following: [String],
 });
 
 const myDB = mongoose.connection.useDb('insta');
