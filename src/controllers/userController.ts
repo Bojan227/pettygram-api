@@ -1,10 +1,26 @@
 import { signup } from '../utils/registerUsers';
 import { uploadImage } from '../utils/uploadImage';
 import { loginUser } from '../utils/loginUser';
+import User from '../models/userModel';
+
 import jwt from 'jsonwebtoken';
 
 const createToken = (_id: any) => {
   return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' });
+};
+
+export const getUsers = async (req: any, res: any) => {
+  const { id } = req.body;
+
+  try {
+    const users = await User.find({ _id: { $ne: id } }, { password: 0 });
+
+    console.log(users);
+
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(404).json({ msg: 'Users cannot be found' });
+  }
 };
 
 export const registerUser = async (req: any, res: any) => {
