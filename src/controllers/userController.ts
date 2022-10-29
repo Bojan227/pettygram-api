@@ -30,13 +30,29 @@ export const registerUser = async (req: any, res: any) => {
 export const login = async (req: any, res: any) => {
   try {
     const user = await loginUser(req.body);
-    const { username, firstName, lastName, imageUrl, _id } = user;
+    const {
+      username,
+      firstName,
+      lastName,
+      imageUrl,
+      _id,
+      followers,
+      following,
+    } = user;
 
     const token = createToken(user._id);
 
     res.status(200).json({
       token,
-      user: { username, firstName, lastName, imageUrl, _id },
+      user: {
+        username,
+        firstName,
+        lastName,
+        imageUrl,
+        _id,
+        followers,
+        following,
+      },
     });
   } catch (error) {
     res.status(400).json({ error: error.message });

@@ -39,6 +39,8 @@ export const signup = async ({
     lastName,
     imageId,
     imageUrl,
+    followers: [],
+    following: [],
   });
 
   return user;
