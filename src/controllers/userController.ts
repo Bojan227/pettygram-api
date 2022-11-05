@@ -86,20 +86,25 @@ export const login = async (req: any, res: any) => {
 };
 
 export const updateUserData = async (req: any, res: any) => {
-  const { userId } = req.params;
-  // const { following, followers } = req.body;
+  const { userId } = req.body;
   const { following } = await User.findOne({ _id: req.user[0] });
 
   const user = await User.findOneAndUpdate(
     { _id: req.user[0] },
-    { following: [...following, userId] },
+    {
+      $set: {
+        following: following.includes(userId)
+          ? following.filter((id) => id !== userId)
+          : [...following, userId],
+      },
+    },
     {
       returnOriginal: false,
     }
   );
 
   if (user) {
-    return res.status(200).json({ msg: 'Success' });
+    return res.status(200).json({ id: userId, user });
   } else {
     return res.status(404).json({ error: 'User unknown' });
   }
