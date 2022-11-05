@@ -84,3 +84,23 @@ export const login = async (req: any, res: any) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const updateUserData = async (req: any, res: any) => {
+  const { userId } = req.params;
+  // const { following, followers } = req.body;
+  const { following } = await User.findOne({ _id: req.user[0] });
+
+  const user = await User.findOneAndUpdate(
+    { _id: req.user[0] },
+    { following: [...following, userId] },
+    {
+      returnOriginal: false,
+    }
+  );
+
+  if (user) {
+    return res.status(200).json({ msg: 'Success' });
+  } else {
+    return res.status(404).json({ error: 'User unknown' });
+  }
+};
