@@ -22,7 +22,7 @@ export const getUsers = async (req: any, res: any) => {
 export const getUserById = async (req: any, res: any) => {
   const { userId } = req.params;
   try {
-    const user = await User.findById({ _id: userId });
+    const user = await User.findById({ _id: userId }, { password: 0 });
 
     res.status(200).json(user);
   } catch (error) {
@@ -116,7 +116,7 @@ export const updateUserData = async (req: any, res: any) => {
   );
 
   if (user) {
-    return res.status(200).json({ id: userId, user });
+    return res.status(200).json({ user });
   } else {
     return res.status(404).json({ error: 'User unknown' });
   }
