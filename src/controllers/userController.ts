@@ -2,7 +2,7 @@ import { signup } from '../utils/registerUsers';
 import { uploadImage } from '../utils/uploadImage';
 import { loginUser } from '../utils/loginUser';
 import User from '../models/userModel';
-
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 
 const createToken = (_id: any) => {
@@ -10,11 +10,9 @@ const createToken = (_id: any) => {
 };
 
 export const getUsers = async (req: any, res: any) => {
-  console.log(req.user);
   try {
     const users = await User.find({}, { password: 0 });
 
-    console.log(users);
     res.status(200).json(users);
   } catch (error) {
     res.status(404).json({ msg: 'Users cannot be found' });
@@ -26,7 +24,6 @@ export const getUserById = async (req: any, res: any) => {
   try {
     const user = await User.findById({ _id: userId });
 
-    console.log(user);
     res.status(200).json(user);
   } catch (error) {
     res.status(404).json({ msg: 'User unknown' });
@@ -87,8 +84,11 @@ export const login = async (req: any, res: any) => {
 
 export const updateUserData = async (req: any, res: any) => {
   const { userId } = req.body;
-  const { following } = await User.findOne({ _id: req.user[0] });
 
+  const { following } = await User.findOne({ _id: req.user[0] });
+  const { followers } = await User.findOne({
+    _id: new mongoose.Types.ObjectId(userId),
+  });
   const user = await User.findOneAndUpdate(
     { _id: req.user[0] },
     {
@@ -101,6 +101,18 @@ export const updateUserData = async (req: any, res: any) => {
     {
       returnOriginal: false,
     }
+  );
+
+  await User.findOneAndUpdate(
+    { _id: new mongoose.Types.ObjectId(userId) },
+    {
+      $set: {
+        followers: followers.includes(req.user[0]._id)
+          ? followers.filter((id) => id !== req.user[0]._id.toString())
+          : [...followers, req.user[0]._id],
+      },
+    },
+    { returnOriginal: false }
   );
 
   if (user) {
