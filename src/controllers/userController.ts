@@ -86,10 +86,14 @@ export const updateUserData = async (req: any, res: any) => {
   const { userId } = req.body;
 
   const loggedUser = await User.findOne({ _id: req.user[0] }, { password: 0 });
+  // User to follow
   const { username, firstName, lastName, imageUrl, followers, following } =
-    await User.findOne({
-      _id: new mongoose.Types.ObjectId(userId),
-    });
+    await User.findOne(
+      {
+        _id: new mongoose.Types.ObjectId(userId),
+      },
+      { password: 0 }
+    );
 
   const newUser = {
     _id: userId,
@@ -103,7 +107,6 @@ export const updateUserData = async (req: any, res: any) => {
 
   const user = await User.findOneAndUpdate(
     { _id: req.user[0] },
-
     {
       $set: {
         following: loggedUser.following.find(({ _id }) => _id === userId)
@@ -114,18 +117,17 @@ export const updateUserData = async (req: any, res: any) => {
 
     {
       returnOriginal: false,
-      password: 0,
     }
-  );
+  ).select('-password');
 
   await User.findOneAndUpdate(
     { _id: new mongoose.Types.ObjectId(userId) },
     {
       $set: {
-        followers: followers.find(
+        followers: followers?.find(
           ({ _id }) => _id === req.user[0]._id.toString()
         )
-          ? followers.filter(({ _id }) => _id !== req.user[0]._id.toString())
+          ? followers?.filter(({ _id }) => _id !== req.user[0]._id.toString())
           : [...followers, user],
       },
     },
