@@ -95,8 +95,6 @@ export const updateUserData = async (req: any, res: any) => {
       { password: 0 }
     );
 
-  console.log(followers);
-
   const newUser = {
     _id: userId,
     username,
@@ -138,7 +136,7 @@ export const updateUserData = async (req: any, res: any) => {
       },
     },
     { returnOriginal: false }
-  );
+  ).select('-password');
 
   if (user) {
     return res.status(200).json({ user, updatedUser });
