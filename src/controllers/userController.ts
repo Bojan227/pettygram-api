@@ -95,6 +95,8 @@ export const updateUserData = async (req: any, res: any) => {
       { password: 0 }
     );
 
+  console.log(followers);
+
   const newUser = {
     _id: userId,
     username,
@@ -109,8 +111,10 @@ export const updateUserData = async (req: any, res: any) => {
     { _id: req.user[0] },
     {
       $set: {
-        following: loggedUser.following.find(({ _id }) => _id === userId)
-          ? loggedUser.following.filter(({ _id }) => _id !== userId)
+        following: loggedUser.following.find(
+          ({ _id }) => _id.toString() === userId
+        )
+          ? loggedUser.following.filter(({ _id }) => _id.toString() !== userId)
           : [...loggedUser.following, newUser],
       },
     },
@@ -120,14 +124,16 @@ export const updateUserData = async (req: any, res: any) => {
     }
   ).select('-password');
 
-  await User.findOneAndUpdate(
+  const updatedUser = await User.findOneAndUpdate(
     { _id: new mongoose.Types.ObjectId(userId) },
     {
       $set: {
         followers: followers?.find(
-          ({ _id }) => _id === req.user[0]._id.toString()
+          ({ _id }) => _id.toString() === req.user[0]._id.toString()
         )
-          ? followers?.filter(({ _id }) => _id !== req.user[0]._id.toString())
+          ? followers?.filter(
+              ({ _id }) => _id.toString() !== req.user[0]._id.toString()
+            )
           : [...followers, user],
       },
     },
@@ -135,7 +141,7 @@ export const updateUserData = async (req: any, res: any) => {
   );
 
   if (user) {
-    return res.status(200).json({ user, newUser });
+    return res.status(200).json({ user, updatedUser });
   } else {
     return res.status(404).json({ error: 'User unknown' });
   }
