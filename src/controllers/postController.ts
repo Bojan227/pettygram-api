@@ -60,25 +60,20 @@ export const createPost = async (req: any, res: any) => {
   }
 };
 export const updateLikes = async (req: any, res: any) => {
-  const { like, _id, userId } = req.body;
+  const { postId } = req.body;
+  const { likes } = await Post.findOne({ _id: postId });
 
-  const { likes } = await Post.findOne({ _id });
-
-  let update = {
+  const update = {
     $set: {
-      likes: [...likes, userId],
+      likes: likes.find(
+        (loggedUser) => loggedUser === req.user[0]._id.toString()
+      )
+        ? likes.filter((id) => id !== req.user[0]._id.toString())
+        : [...likes, req.user[0]._id.toString()],
     },
   };
 
-  if (!like) {
-    update = {
-      $set: {
-        likes: likes.filter((id) => id !== userId),
-      },
-    };
-  }
-
-  const post = await Post.findOneAndUpdate({ _id }, update, {
+  const post = await Post.findOneAndUpdate({ _id: postId }, update, {
     returnOriginal: false,
   }).populate({
     path: 'createdBy',
