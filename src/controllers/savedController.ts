@@ -1,14 +1,11 @@
+import User from '../models/userModel';
+import Post from '../models/postModel';
+
 export const getSavedItemsByUserId = async (req: any, res: any) => {
-  const { userId } = req.params;
-  console.log(userId);
-  res.status(200).json({ id: 'wawom' });
-  //   try {
-  //     const posts = await Post.find({ createdBy: userId }).populate({
-  //       path: 'createdBy',
-  //       select: ['_id', 'username', 'imageUrl'],
-  //     });
-  //     res.status(200).json(posts);
-  //   } catch (error) {
-  //     res.status(400).json({ error: error.message });
-  //   }
+  try {
+    const { saved } = await User.findOne({ _id: req.user[0] });
+    res.status(200).json(saved);
+  } catch (error) {
+    res.status(400).json({ msg: 'No saved posts' });
+  }
 };
