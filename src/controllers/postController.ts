@@ -54,7 +54,12 @@ export const createPost = async (req: any, res: any) => {
       likes: [],
       createdBy: req.user[0],
     });
-    res.status(200).json({ post });
+
+    const postWithUser = await post.populate({
+      path: 'createdBy',
+      select: ['_id', 'username', 'imageUrl'],
+    });
+    res.status(200).json(postWithUser);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
