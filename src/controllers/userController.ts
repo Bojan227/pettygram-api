@@ -61,6 +61,7 @@ export const login = async (req: any, res: any) => {
       _id,
       followers,
       following,
+      saved,
     } = user;
 
     const token = createToken(user._id);
@@ -75,6 +76,7 @@ export const login = async (req: any, res: any) => {
         _id,
         followers,
         following,
+        saved,
       },
     });
   } catch (error) {
@@ -87,13 +89,20 @@ export const updateUserData = async (req: any, res: any) => {
 
   const loggedUser = await User.findOne({ _id: req.user[0] }, { password: 0 });
   // User to follow
-  const { username, firstName, lastName, imageUrl, followers, following } =
-    await User.findOne(
-      {
-        _id: new mongoose.Types.ObjectId(userId),
-      },
-      { password: 0 }
-    );
+  const {
+    username,
+    firstName,
+    lastName,
+    imageUrl,
+    followers,
+    following,
+    saved,
+  } = await User.findOne(
+    {
+      _id: new mongoose.Types.ObjectId(userId),
+    },
+    { password: 0 }
+  );
 
   const newUser = {
     _id: userId,
@@ -103,6 +112,7 @@ export const updateUserData = async (req: any, res: any) => {
     imageUrl,
     followers,
     following,
+    saved,
   };
 
   const user = await User.findOneAndUpdate(
