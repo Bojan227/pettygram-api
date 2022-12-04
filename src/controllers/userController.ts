@@ -84,7 +84,7 @@ export const login = async (req: any, res: any) => {
   }
 };
 
-export const updateUserData = async (req: any, res: any) => {
+export const updateUserFollowStatus = async (req: any, res: any) => {
   const { userId } = req.body;
 
   const loggedUser = await User.findOne({ _id: req.user[0] }, { password: 0 });
@@ -152,5 +152,21 @@ export const updateUserData = async (req: any, res: any) => {
     return res.status(200).json({ user, updatedUser });
   } else {
     return res.status(404).json({ error: 'User unknown' });
+  }
+};
+
+export const editUserInfo = async (req: any, res: any) => {
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.user[0] },
+      req.body,
+      { returnOriginal: false }
+    ).select('-password');
+
+    console.log(updatedUser);
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
