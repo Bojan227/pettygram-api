@@ -1,6 +1,6 @@
 import User from '../models/userModel';
 import bcrypt from 'bcrypt';
-import { body, validationResult, check } from 'express-validator';
+import validator from 'validator';
 
 type signUserProps = {
   username: string;
@@ -29,6 +29,11 @@ export const signup = async ({
     throw new Error('username already in use');
   }
 
+  // validation
+  if (!validator.isStrongPassword(password)) {
+    throw Error('Password not strong enough');
+  }
+
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
@@ -41,6 +46,7 @@ export const signup = async ({
     imageUrl,
     followers: [],
     following: [],
+    saved: [],
   });
 
   return user;
