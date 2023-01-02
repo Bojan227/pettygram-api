@@ -1,4 +1,5 @@
 import { Server } from 'socket.io';
+import User from '../models/userModel';
 import express from 'express';
 const app = express();
 import http from 'http';
@@ -33,15 +34,17 @@ io.on('connection', (socket) => {
     io.emit('online-users', users);
   });
 
-  socket.on('send_like', ({ senderId, receiverId, action, message }) => {
+  socket.on('send_like', async ({ senderId, receiverId, action, message }) => {
     const user = getUser(receiverId);
-    console.log({ senderId, receiverId, action, message });
+    const sender = await User.findOne({ _id: senderId }, { password: 0 });
+
     if (user) {
       io.in(user.socketId).emit('receive_like', {
-        senderId,
+        senderId: sender,
         receiverId,
         action,
         message,
+        read: false,
       });
     }
   });
