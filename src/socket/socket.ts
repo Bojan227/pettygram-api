@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import User from '../models/userModel';
+import Notifications from '../models/notificationsModel';
 import express from 'express';
 const app = express();
 import http from 'http';
@@ -34,20 +35,30 @@ io.on('connection', (socket) => {
     io.emit('online-users', users);
   });
 
-  socket.on('send_like', async ({ senderId, receiverId, action, message }) => {
-    const user = getUser(receiverId);
-    const sender = await User.findOne({ _id: senderId }, { password: 0 });
-
-    if (user) {
-      io.in(user.socketId).emit('receive_like', {
-        senderId: sender,
-        receiverId,
-        action,
+  socket.on(
+    'send_notification',
+    async ({ senderId, receiverId, action, message }) => {
+      const user = getUser(receiverId);
+      const sender = await User.findOne({ _id: senderId }, { password: 0 });
+      await Notifications.create({
+        receiver: receiverId,
+        sender: senderId,
         message,
+        action,
         read: false,
       });
+
+      if (user) {
+        io.in(user.socketId).emit('receive_notification', {
+          senderId: sender,
+          receiverId,
+          action,
+          message,
+          read: false,
+        });
+      }
     }
-  });
+  );
 
   socket.on('send_message', ({ senderId, receiverId, message, time }) => {
     const user = getUser(receiverId);
