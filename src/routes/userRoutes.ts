@@ -7,6 +7,7 @@ import {
   getUserById,
   updateUserFollowStatus,
   editUserInfo,
+  deleteProfilePicture
 } from '../controllers/userController';
 const router = express.Router();
 
@@ -19,4 +20,5 @@ router.use(requireAuth);
 router.put('/', updateUserFollowStatus);
 router.put('/edit', editUserInfo);
 
+router.delete('/photo', deleteProfilePicture)
 export default router;
