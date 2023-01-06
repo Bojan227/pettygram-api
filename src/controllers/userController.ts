@@ -1,6 +1,7 @@
 import { signup } from '../utils/registerUsers';
 import { uploadImage } from '../utils/uploadImage';
 import { loginUser } from '../utils/loginUser';
+import { deleteImage } from '../utils/deleteImage';
 import User from '../models/userModel';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
@@ -58,6 +59,7 @@ export const login = async (req: any, res: any) => {
       firstName,
       lastName,
       imageUrl,
+      imageId,
       _id,
       followers,
       following,
@@ -73,6 +75,7 @@ export const login = async (req: any, res: any) => {
         firstName,
         lastName,
         imageUrl,
+        imageId,
         _id,
         followers,
         following,
@@ -163,10 +166,30 @@ export const editUserInfo = async (req: any, res: any) => {
       { returnOriginal: false }
     ).select('-password');
 
-    console.log(updatedUser);
-
     res.status(200).json(updatedUser);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+export const deleteProfilePicture = async (req: any, res: any) => {
+  const { pictureId } = req.body;
+  console.log(pictureId);
+  try {
+    await deleteImage(pictureId);
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.user[0] },
+      { imageUrl: '', imageId: '' },
+      { returnOriginal: false }
+    ).select('-password');
+
+    res
+      .status(200)
+      .json({
+        message: 'Your photo was successfully deleted',
+        user: updatedUser,
+      });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
   }
 };
