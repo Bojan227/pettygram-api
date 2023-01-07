@@ -7,7 +7,8 @@ import {
   getUserById,
   updateUserFollowStatus,
   editUserInfo,
-  deleteProfilePicture
+  deleteProfilePicture,
+  changeProfilePicture,
 } from '../controllers/userController';
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.post('/login', login);
 router.use(requireAuth);
 router.put('/', updateUserFollowStatus);
 router.put('/edit', editUserInfo);
+router.put('/photo', changeProfilePicture);
 
-router.delete('/photo', deleteProfilePicture)
+router.delete('/photo', deleteProfilePicture);
 export default router;

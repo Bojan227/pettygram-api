@@ -174,7 +174,7 @@ export const editUserInfo = async (req: any, res: any) => {
 
 export const deleteProfilePicture = async (req: any, res: any) => {
   const { pictureId } = req.body;
-  console.log(pictureId);
+
   try {
     await deleteImage(pictureId);
     const updatedUser = await User.findOneAndUpdate(
@@ -183,12 +183,27 @@ export const deleteProfilePicture = async (req: any, res: any) => {
       { returnOriginal: false }
     ).select('-password');
 
+    res.status(200).json({
+      message: 'Your photo was successfully deleted',
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+export const changeProfilePicture = async (req: any, res: any) => {
+  const { newImage } = req.body;
+  try {
+    const { imageUrl, imageId } = await uploadImage(newImage);
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.user[0] },
+      { imageUrl, imageId },
+      { returnOriginal: false }
+    ).select('-password');
+
     res
       .status(200)
-      .json({
-        message: 'Your photo was successfully deleted',
-        user: updatedUser,
-      });
+      .json({ message: 'Your photo was successfully updated', updatedUser });
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
