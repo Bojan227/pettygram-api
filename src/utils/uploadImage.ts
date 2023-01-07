@@ -1,12 +1,13 @@
 import cloudinary from 'cloudinary';
 
-const options = {
+export const options = {
   use_filename: true,
   unique_filename: false,
   overwrite: true,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
   cloud_name: 'boki2435',
+  invalidate: true,
 };
 
 export const uploadImage = async (img: string) => {
