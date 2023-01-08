@@ -46,15 +46,17 @@ io.on('connection', (socket) => {
         message,
         action,
         read: false,
+        createdAt: new Date(),
       });
 
       if (user) {
         io.in(user.socketId).emit('receive_notification', {
-          senderId: sender,
-          receiverId,
+          sender,
+          receiver: receiverId,
           action,
           message,
           read: false,
+          createdAt: new Date(),
         });
       }
     }

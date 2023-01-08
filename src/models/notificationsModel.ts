@@ -8,6 +8,7 @@ const NotificationsSchema = new Schema({
   receiver: { type: Schema.Types.ObjectId, ref: User },
   read: Boolean,
   action: String,
+  createdAt: String,
 });
 const myDB = mongoose.connection.useDb('insta');
 
