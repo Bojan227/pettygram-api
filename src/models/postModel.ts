@@ -5,8 +5,8 @@ import User from './userModel';
 const PostSchema = new Schema({
   text: String,
   createdBy: { type: Schema.Types.ObjectId, ref: User },
-  imageUrl: String,
-  imageId: String,
+  imageUrl: String || [String],
+  imageId: String || [String],
   createdAt: String,
   likes: [String],
 });
