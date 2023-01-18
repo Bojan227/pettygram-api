@@ -1,6 +1,7 @@
 import Post from '../models/postModel';
 import Comment from '../models/commentsModel';
 import { uploadImage } from '../utils/uploadImage';
+import { convertImages } from '../utils/convertImages';
 
 export const getPosts = async (req: any, res: any) => {
   try {
@@ -41,16 +42,16 @@ export const getPostById = async (req: any, res: any) => {
 };
 
 export const createPost = async (req: any, res: any) => {
-  const { text, image } = req.body;
+  const { text, images } = req.body;
 
   try {
-    const { imageUrl, imageId } = await uploadImage(image);
+    const { imageUrls, imageIds } = await convertImages(images);
 
     const post = await Post.create({
       text,
       createdAt: new Date(),
-      imageUrl,
-      imageId,
+      imageUrl: imageUrls,
+      imageId: imageIds,
       likes: [],
       createdBy: req.user[0],
     });
