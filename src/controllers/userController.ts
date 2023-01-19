@@ -183,7 +183,6 @@ export const deleteProfilePicture = async (req: any, res: any) => {
       { returnOriginal: false }
     ).select('-password');
 
-    console.log(updatedUser);
     res.status(200).json({
       message: 'Your photo was successfully deleted',
       updatedUser,
