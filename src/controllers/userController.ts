@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 
 const createToken = (_id: any) => {
-  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' });
+  return jwt.sign({ _id }, process.env.SECRET);
 };
 
 export const getUsers = async (req: any, res: any) => {
