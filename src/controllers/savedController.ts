@@ -5,7 +5,9 @@ import mongoose from 'mongoose';
 export const getSavedItemsByUserId = async (req: any, res: any) => {
   try {
     const { saved } = await User.findOne({ _id: req.user[0] });
-    res.status(200).json(saved);
+    const validRecords = await Post.find({ _id: { $in: saved } });
+
+    res.status(200).json(validRecords);
   } catch (error) {
     res.status(400).json({ msg: 'No saved posts' });
   }
