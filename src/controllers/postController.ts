@@ -13,7 +13,9 @@ export const getPosts = async (req: any, res: any) => {
         path: 'createdBy',
         select: ['_id', 'username', 'imageUrl'],
       });
-    res.status(200).json(posts);
+
+    const numberOfPosts = await Post.aggregate([{ $count: 'posts' }]);
+    res.status(200).json({ posts, numberOfPosts: numberOfPosts[0].posts });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
