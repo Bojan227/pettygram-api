@@ -1,14 +1,18 @@
 import Post from '../models/postModel';
 import Comment from '../models/commentsModel';
-import { uploadImage } from '../utils/uploadImage';
 import { convertImages } from '../utils/convertImages';
 
 export const getPosts = async (req: any, res: any) => {
+  const { page } = req.query;
+
   try {
-    const posts = await Post.find({}).populate({
-      path: 'createdBy',
-      select: ['_id', 'username', 'imageUrl'],
-    });
+    const posts = await Post.find({})
+      .skip(page * 5)
+      .limit(5)
+      .populate({
+        path: 'createdBy',
+        select: ['_id', 'username', 'imageUrl'],
+      });
     res.status(200).json(posts);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -35,6 +39,7 @@ export const getPostById = async (req: any, res: any) => {
       path: 'createdBy',
       select: ['_id', 'username', 'imageUrl'],
     });
+    console.log(post);
     res.status(200).json(post);
   } catch (error) {
     res.status(400).json({ error: error.message });
