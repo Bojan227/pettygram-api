@@ -41,7 +41,6 @@ export const getPostById = async (req: any, res: any) => {
       path: 'createdBy',
       select: ['_id', 'username', 'imageUrl'],
     });
-    console.log(post);
     res.status(200).json(post);
   } catch (error) {
     res.status(400).json({ error: error.message });

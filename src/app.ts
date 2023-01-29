@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { server, app } from './socket/socket';
+import seedDB from './utils/seedDb';
 
 // config env
 import dotenv from 'dotenv';
@@ -28,9 +29,8 @@ app.use('/chat', chatRoutes);
 app.use('/notifications', notificationRoutes);
 mongoose.connect(process.env.MONGO_URI).then(() => {
   server.listen(process.env.PORT || 4000, () => {
-    console.log(`Listening on port ${process.env.PORT}`);
   });
-  console.log('Connected to DB');
+
 });
 
 const db = mongoose.connection;

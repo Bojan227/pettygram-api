@@ -28,7 +28,6 @@ const getUser = (userId: string) => {
 io.on('connection', (socket) => {
   socket.on('add_user', ({ userId }) => {
     addUser(userId, socket.id);
-    console.log(users);
   });
 
   socket.on('getOnlineUsers', () => {
@@ -90,7 +89,6 @@ io.on('connection', (socket) => {
 
   socket.on('remove_user', ({ userId }) => {
     users = users.filter((user) => user.userId !== userId);
-    console.log(users);
   });
 });
 
