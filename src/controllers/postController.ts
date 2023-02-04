@@ -12,7 +12,8 @@ export const getPosts = async (req: any, res: any) => {
       .populate({
         path: 'createdBy',
         select: ['_id', 'username', 'imageUrl'],
-      });
+      })
+      .sort({ createdAt: -1 });
 
     const numberOfPosts = await Post.aggregate([{ $count: 'posts' }]);
     res.status(200).json({ posts, numberOfPosts: numberOfPosts[0].posts });
