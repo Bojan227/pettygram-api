@@ -28,9 +28,7 @@ app.use('/saved', savedRoute);
 app.use('/chat', chatRoutes);
 app.use('/notifications', notificationRoutes);
 mongoose.connect(process.env.MONGO_URI).then(() => {
-  server.listen(process.env.PORT || 4000, () => {
-  });
-
+  server.listen(process.env.PORT || 4000);
 });
 
 const db = mongoose.connection;
