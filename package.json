@@ -13,13 +13,14 @@
     "mongoose": "^6.6.1",
     "nodemon": "^2.0.20",
     "socket.io": "^4.5.4",
+    "tsconfig.json": "^1.0.11",
     "validator": "^13.7.0"
   },
   "name": "backend",
   "version": "1.0.0",
   "main": "src/app.ts",
   "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "prebuild": "npm install tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "nodemon dist/app.js",
