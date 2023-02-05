@@ -17,7 +17,7 @@ export const loginUser = async ({ username, password }: loginUserProps) => {
     throw new Error('Wrong username');
   }
 
-  const match = await bcrypt.compare(password, user.password);
+  const match = await bcrypt.compare(password, user.password as string);
 
   if (!match) {
     throw new Error('Wrong password');
