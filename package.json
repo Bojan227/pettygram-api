@@ -20,8 +20,8 @@
   "version": "1.0.0",
   "main": "src/app.ts",
   "scripts": {
-    "prebuild": "npm install tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc",
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "npm install && tsc",
     "prestart": "npm run build",
     "start": "node ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
