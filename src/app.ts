@@ -2,7 +2,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { server, app } from './socket/socket';
-import seedDB from './utils/seedDb';
 
 // config env
 import dotenv from 'dotenv';
