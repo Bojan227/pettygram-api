@@ -21,7 +21,7 @@
   "main": "src/app.ts",
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "npm install && tsc",
+    "build": "tsc",
     "prestart": "npm run build",
     "start": "node ./dist/app.js"
   },
