@@ -43,3 +43,19 @@ export const updateCommentLikes = async (req: any, res: any) => {
     return res.status(200).json({ msg: 'Success', post });
   }
 };
+
+export const editComment = async (req: any, res: any) => {
+  const { commentId, comment } = req.body;
+
+  const newComment = await Comment.findOneAndUpdate(
+    { _id: commentId },
+    { comment },
+    { returnOriginal: false }
+  );
+
+  if (!newComment) {
+    return res.status(400).json({ msg: 'No such comment' });
+  } else {
+    return res.status(200).json({ msg: 'Success', newComment });
+  }
+};
