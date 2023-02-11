@@ -59,3 +59,13 @@ export const editComment = async (req: any, res: any) => {
     return res.status(200).json({ msg: 'Success', newComment });
   }
 };
+
+export const deleteComment = async (req: any, res: any) => {
+  const { commentId } = req.body;
+  try {
+    await Comment.findOneAndDelete({ _id: commentId });
+    return res.status(200).json({ msg: 'Success' });
+  } catch (error) {
+    return res.status(400).json({ error: 'unable to delete the comment' });
+  }
+};
