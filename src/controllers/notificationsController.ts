@@ -5,7 +5,9 @@ export const getNotificationsByReceiverId = async (req: any, res: any) => {
   try {
     const notifications = await Notifications.find({
       receiver: receiverId,
-    }).populate({ path: 'sender', select: ['_id', 'username', 'imageUrl'] });
+    })
+      .populate({ path: 'sender', select: ['_id', 'username', 'imageUrl'] })
+      .sort({ _id: -1 });
 
     res.status(200).json(notifications);
   } catch (error) {
