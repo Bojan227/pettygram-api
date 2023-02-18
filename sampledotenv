@@ -1,0 +1,5 @@
+MONGO_URI="Your mongo atlas connection string"
+API_KEY="cloudinary credentials"
+API_SECRET="cloudinary credentials"
+PORT=4000
+SECRET="generate random secret for jwtoken"
