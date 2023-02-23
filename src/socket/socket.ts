@@ -8,7 +8,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: 'https://instagram-clone-ruby-seven.vercel.app',
+    origin: 'https://instagram-clone-gamma-five.vercel.app',
     methods: ['GET', 'POST'],
   },
 });
