@@ -8,7 +8,7 @@ export default async function seedDB() {
     const posts = [];
 
     for (let i = 0; i < 20; i++) {
-      const createdBy = '634559e08c04c0d02ad68d97';
+      const createdBy = '63f76286810a293888d18152';
       const imageUrl = [faker.image.city(1234, 2345, true)];
       const imageId = [i];
       const text = faker.lorem.text();
