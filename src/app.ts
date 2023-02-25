@@ -15,6 +15,7 @@ import commentRoutes from './routes/commentRoutes';
 import savedRoute from './routes/savedRoute';
 import chatRoutes from './routes/chatRoutes';
 import notificationRoutes from './routes/notificationRoutes';
+import recipeRoutes from './routes/recipeRoutes';
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -26,8 +27,11 @@ app.use('/comments', commentRoutes);
 app.use('/saved', savedRoute);
 app.use('/chat', chatRoutes);
 app.use('/notifications', notificationRoutes);
+app.use('/recipe', recipeRoutes);
 mongoose.connect(process.env.MONGO_URI).then(() => {
-  server.listen(process.env.PORT || 4000);
+  server.listen(process.env.PORT || 4000, () => {
+    console.log(`listening on port ${process.env.PORT}`);
+  });
 });
 
 const db = mongoose.connection;
