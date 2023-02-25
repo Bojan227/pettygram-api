@@ -4,6 +4,7 @@ import User from './userModel';
 
 const RecipeSchema = new Schema({
   ingredients: [String],
+  title: String,
   createdBy: { type: Schema.Types.ObjectId, ref: User },
   imageUrl: [String],
   imageId: [String],
