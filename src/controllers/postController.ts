@@ -28,7 +28,7 @@ export const getPostsByUserId = async (req: any, res: any) => {
     const posts = await Post.find({ createdBy: userId }).populate({
       path: 'createdBy',
       select: ['_id', 'username', 'imageUrl'],
-    });
+    }).sort({ _id: -1 });
     res.status(200).json(posts);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -79,9 +79,9 @@ export const updateLikes = async (req: any, res: any) => {
   const update = {
     $set: {
       likes: likes.find(
-        (loggedUser) => loggedUser === req.user[0]._id.toString()
+        (loggedUser:string) => loggedUser === req.user[0]._id.toString()
       )
-        ? likes.filter((id) => id !== req.user[0]._id.toString())
+        ? likes.filter((id:String) => id !== req.user[0]._id.toString())
         : [...likes, req.user[0]._id.toString()],
     },
   };
