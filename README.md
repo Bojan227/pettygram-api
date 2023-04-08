@@ -1,4 +1,4 @@
-# instagram-api
+# pettygram-api
 
 ##  Running Locally
 
