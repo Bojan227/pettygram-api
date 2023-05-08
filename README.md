@@ -11,7 +11,7 @@ Mongo DB
 ##  1. Clone the repo and install dependencies
 ```
 git clone 
-cd instagram-api
+cd pettygram-api
 npm i
 ```
 ## 2. Modify the .env file
