@@ -3,3 +3,4 @@ API_KEY="cloudinary credentials"
 API_SECRET="cloudinary credentials"
 PORT=4000
 SECRET="generate random secret for jwtoken"
+REDIS-PW="redis cloud password"
