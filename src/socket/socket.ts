@@ -1,43 +1,62 @@
-import { Server } from 'socket.io';
-import User from '../models/userModel';
-import Notifications from '../models/notificationsModel';
-import express from 'express';
+import { Server } from "socket.io";
+import User from "../models/userModel";
+import Notifications from "../models/notificationsModel";
+import express from "express";
+
+//redis redisClient
+import { redisClient } from "../redis";
+
 const app = express();
-import http from 'http';
+import http from "http";
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: 'https://pettygram.vercel.app',
-    methods: ['GET', 'POST'],
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
   },
 });
 
-let users: { userId: string; socketId: string }[] = [];
+const addUser = async (userId: string, socketId: string) => {
+  const user = await getUser(userId);
+  const userParsed = JSON.parse(user);
 
-const addUser = (userId: string, socketId: string) => {
-  if (!users?.some((user) => user?.userId === userId)) {
-    users.push({ userId, socketId });
+  if (userParsed?.userId !== userId) {
+    await redisClient.hSet(
+      "users",
+      userId,
+      JSON.stringify({ userId, socketId })
+    );
   }
 };
 
-const getUser = (userId: string) => {
-  return users.find((user) => user.userId === userId);
+const getUser = async (userId: string) => {
+  const user = await redisClient.hGet("users", String(userId));
+
+  return user;
 };
 
-io.on('connection', (socket) => {
-  socket.on('add_user', ({ userId }) => {
+io.on("connection", (socket) => {
+  socket.on("add_user", ({ userId }) => {
     addUser(userId, socket.id);
   });
 
-  socket.on('getOnlineUsers', () => {
-    io.emit('online-users', users);
+  socket.on("getOnlineUsers", async () => {
+    const users = await redisClient.hGetAll("users");
+    const usersArray = [];
+
+    for (let user in users) {
+      usersArray.push(JSON.parse(users[user]));
+    }
+
+    io.emit("online-users", usersArray);
   });
 
   socket.on(
-    'send_notification',
+    "send_notification",
     async ({ senderId, receiverId, action, message }) => {
-      const user = getUser(receiverId);
+      const user = await getUser(receiverId);
+
       const sender = await User.findOne({ _id: senderId }, { password: 0 });
       await Notifications.create({
         receiver: receiverId,
@@ -49,7 +68,9 @@ io.on('connection', (socket) => {
       });
 
       if (user) {
-        io.in(user.socketId).emit('receive_notification', {
+        const userObj = JSON.parse(user);
+
+        io.in(userObj.socketId).emit("receive_notification", {
           sender,
           receiver: receiverId,
           action,
@@ -61,10 +82,12 @@ io.on('connection', (socket) => {
     }
   );
 
-  socket.on('send_message', ({ senderId, receiverId, message, time }) => {
-    const user = getUser(receiverId);
+  socket.on("send_message", async ({ senderId, receiverId, message, time }) => {
+    const user = await getUser(receiverId);
+
     if (user) {
-      io.in(user.socketId).emit('notification_message', {
+      const userObj = JSON.parse(user);
+      io.in(userObj.socketId).emit("notification_message", {
         senderId,
         message,
         receiverId,
@@ -74,10 +97,13 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('send_message', ({ senderId, receiverId, message, time }) => {
-    const user = getUser(receiverId);
+  socket.on("send_message", async ({ senderId, receiverId, message, time }) => {
+    const user = await getUser(receiverId);
+
     if (user) {
-      io.in(user.socketId).emit('receive_message', {
+      const userObj = JSON.parse(user);
+
+      io.in(userObj.socketId).emit("receive_message", {
         senderId,
         message,
         receiverId,
@@ -87,8 +113,8 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('remove_user', ({ userId }) => {
-    users = users.filter((user) => user.userId !== userId);
+  socket.on("remove_user", async ({ userId }) => {
+    await redisClient.hDel("users", String(userId));
   });
 });
 
