@@ -11,7 +11,7 @@ export const getPosts = async (req: any, res: any) => {
       .limit(5)
       .populate({
         path: 'createdBy',
-        select: ['_id', 'username', 'imageUrl'],
+        select: ['_id', 'username', 'imageUrl', 'saved'],
       })
       .sort({ _id: -1 });
 
@@ -27,7 +27,7 @@ export const getPostsByUserId = async (req: any, res: any) => {
   try {
     const posts = await Post.find({ createdBy: userId }).populate({
       path: 'createdBy',
-      select: ['_id', 'username', 'imageUrl'],
+      select: ['_id', 'username', 'imageUrl', 'saved'],
     }).sort({ _id: -1 });
     res.status(200).json(posts);
   } catch (error) {
@@ -40,7 +40,7 @@ export const getPostById = async (req: any, res: any) => {
   try {
     const post = await Post.findOne({ _id: postId }).populate({
       path: 'createdBy',
-      select: ['_id', 'username', 'imageUrl'],
+      select: ['_id', 'username', 'imageUrl', 'saved'],
     });
     res.status(200).json(post);
   } catch (error) {
@@ -65,7 +65,7 @@ export const createPost = async (req: any, res: any) => {
 
     const postWithUser = await post.populate({
       path: 'createdBy',
-      select: ['_id', 'username', 'imageUrl'],
+      select: ['_id', 'username', 'imageUrl', 'saved'],
     });
     res.status(200).json(postWithUser);
   } catch (error) {
