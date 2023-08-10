@@ -18,9 +18,11 @@ export const createComment = async (req: any, res: any) => {
 export const updateCommentLikes = async (req: any, res: any) => {
   const { postId } = req.body;
 
-  const { likes } = await Comment.findOne({ _id: postId });
+ 
 
   try {
+   const { likes } = await Comment.findOne({ _id: postId });
+    
       const update = {
     $set: {
       likes: likes.find(
