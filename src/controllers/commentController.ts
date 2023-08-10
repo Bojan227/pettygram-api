@@ -21,8 +21,8 @@ export const updateCommentLikes = async (req: any, res: any) => {
  
 
   try {
-   const { likes } = await Comment.findOne({ _id: postId });
-    console.log(likes);
+   const { likes } = await Comment.findOne({ post: postId });
+    
       const update = {
     $set: {
       likes: likes.find(
@@ -33,13 +33,13 @@ export const updateCommentLikes = async (req: any, res: any) => {
     },
   };
 
-  const post = await Comment.findOneAndUpdate({ _id: postId }, update, {
+  const post = await Comment.findOneAndUpdate({ post: postId }, update, {
     returnOriginal: false,
   }).populate({
     path: 'createdBy',
     select: ['_id', 'username', 'imageUrl'],
   });
-      console.log(post);
+     
     return res.status(200).json({ msg: 'Success', post });
   }catch (error) {
     return res.status(400).json({ msg: 'No such post' });
