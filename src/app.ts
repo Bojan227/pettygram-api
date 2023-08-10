@@ -19,7 +19,7 @@ import recipeRoutes from './routes/recipeRoutes';
 
 app.use(
   cors({
-    origin: "https://pettygram.vercel.app",
+    origin: "http://localhost:58653",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
