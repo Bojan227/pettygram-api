@@ -20,7 +20,8 @@ export const updateCommentLikes = async (req: any, res: any) => {
 
   const { likes } = await Comment.findOne({ _id: postId });
 
-  const update = {
+  try {
+      const update = {
     $set: {
       likes: likes.find(
         (loggedUser) => loggedUser === req.user[0]._id.toString()
@@ -36,12 +37,12 @@ export const updateCommentLikes = async (req: any, res: any) => {
     path: 'createdBy',
     select: ['_id', 'username', 'imageUrl'],
   });
-
-  if (!post) {
-    return res.status(400).json({ msg: 'No such post' });
-  } else {
     return res.status(200).json({ msg: 'Success', post });
-  }
+  }catch(){
+    return res.status(400).json({ msg: 'No such post' });
+  } 
+
+ 
 };
 
 export const editComment = async (req: any, res: any) => {
