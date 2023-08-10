@@ -40,7 +40,7 @@ export const updateCommentLikes = async (req: any, res: any) => {
     select: ['_id', 'username', 'imageUrl'],
   });
     return res.status(200).json({ msg: 'Success', post });
-  }catch(){
+  }catch (error) {
     return res.status(400).json({ msg: 'No such post' });
   } 
 
