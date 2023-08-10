@@ -19,7 +19,7 @@ import recipeRoutes from './routes/recipeRoutes';
 
 app.use(
   cors({
-    origin: "http://localhost:58653",
+    origin: "*",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
