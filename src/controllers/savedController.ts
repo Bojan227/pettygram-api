@@ -5,7 +5,11 @@ import mongoose from 'mongoose';
 export const getSavedItemsByUserId = async (req: any, res: any) => {
   try {
     const { saved } = await User.findOne({ _id: req.user[0] });
-    const validRecords = await Post.find({ _id: { $in: saved } });
+    const validRecords = await Post.find({ _id: { $in: saved } }).populate({
+        path: 'createdBy',
+        select: ['_id', 'username', 'imageUrl', 'saved'],
+      })
+      .sort({ _id: -1 });
 
     res.status(200).json(validRecords);
   } catch (error) {
