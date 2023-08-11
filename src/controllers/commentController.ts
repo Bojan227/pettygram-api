@@ -33,14 +33,14 @@ export const updateCommentLikes = async (req: any, res: any) => {
     },
   };
 
-  const post = await Comment.findOneAndUpdate({ post: postId }, update, {
+  const comment = await Comment.findOneAndUpdate({ post: postId }, update, {
     returnOriginal: false,
   }).populate({
     path: 'createdBy',
     select: ['_id', 'username', 'imageUrl'],
   });
      
-    return res.status(200).json({ msg: 'Success', post });
+    return res.status(200).json({ msg: 'Success', comment });
   }catch (error) {
     return res.status(400).json({ msg: 'No such post' });
   } 
