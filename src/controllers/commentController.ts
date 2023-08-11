@@ -16,12 +16,12 @@ export const createComment = async (req: any, res: any) => {
 };
 
 export const updateCommentLikes = async (req: any, res: any) => {
-  const { postId } = req.body;
+  const { commentId } = req.body;
 
  
 
   try {
-   const { likes } = await Comment.findOne({ post: postId });
+   const { likes } = await Comment.findOne({ _id: commentId });
     
       const update = {
     $set: {
@@ -33,7 +33,7 @@ export const updateCommentLikes = async (req: any, res: any) => {
     },
   };
 
-  const comment = await Comment.findOneAndUpdate({ post: postId }, update, {
+  const comment = await Comment.findOneAndUpdate({ _id: commentId }, update, {
     returnOriginal: false,
   }).populate({
     path: 'createdBy',
