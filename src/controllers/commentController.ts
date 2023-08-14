@@ -55,7 +55,10 @@ export const editComment = async (req: any, res: any) => {
     { _id: commentId },
     { comment },
     { returnOriginal: false }
-  );
+  ).populate({
+    path: 'createdBy',
+    select: ['_id', 'username', 'imageUrl'],
+  });
 
   if (!newComment) {
     return res.status(400).json({ msg: 'No such comment' });
