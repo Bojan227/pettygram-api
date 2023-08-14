@@ -51,6 +51,7 @@ export const updateCommentLikes = async (req: any, res: any) => {
 export const editComment = async (req: any, res: any) => {
   const { commentId, comment } = req.body;
 
+  try {
   const newComment = await Comment.findOneAndUpdate(
     { _id: commentId },
     { comment },
@@ -60,11 +61,12 @@ export const editComment = async (req: any, res: any) => {
     select: ['_id', 'username', 'imageUrl'],
   });
 
-  if (!newComment) {
-    return res.status(400).json({ msg: 'No such comment' });
-  } else {
     return res.status(200).json({ msg: 'Success', newComment });
+  } catch (error){
+    return res.status(400).json({ msg: 'No such comment' });
   }
+
+
 };
 
 export const deleteComment = async (req: any, res: any) => {
