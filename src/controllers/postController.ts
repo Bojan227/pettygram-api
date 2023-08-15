@@ -92,7 +92,7 @@ export const updateLikes = async (req: any, res: any) => {
     returnOriginal: false,
   }).populate({
     path: 'createdBy',
-    select: ['_id', 'username', 'imageUrl'],
+    select: ['_id', 'username', 'imageUrl', 'saved'],
   });
 
    return res.status(200).json(post); 
