@@ -74,7 +74,9 @@ export const createPost = async (req: any, res: any) => {
 };
 export const updateLikes = async (req: any, res: any) => {
   const { postId } = req.body;
-  const { likes } = await Post.findOne({ _id: postId });
+
+  try {
+    const { likes } = await Post.findOne({ _id: postId });
 
   const update = {
     $set: {
@@ -93,10 +95,9 @@ export const updateLikes = async (req: any, res: any) => {
     select: ['_id', 'username', 'imageUrl'],
   });
 
-  if (!post) {
-    return res.status(400).json({ msg: 'No such post' });
-  } else {
-    return res.status(200).json({ msg: 'Success', post });
+   return res.status(200).json(post); 
+  } catch (error) {
+   return res.status(400).json({ msg: 'No such post' });
   }
 };
 
